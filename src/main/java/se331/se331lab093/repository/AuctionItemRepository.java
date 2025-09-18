@@ -7,6 +7,6 @@ import se331.se331lab093.entity.AuctionItem;
 
 @Repository
 public interface AuctionItemRepository extends JpaRepository<AuctionItem, Long> {
-    Page<AuctionItem> findByDescriptionContaining(String description);
-    Page<AuctionItem> findBySuccessfulBid_AmountLessThan(Double amount);
+    Page<AuctionItem> findByDescriptionContaining(String description, Pageable pageable);
+    Page<AuctionItem> findBySuccessfulBid_AmountLessThan(Double amount, Pageable pageable);
 }
