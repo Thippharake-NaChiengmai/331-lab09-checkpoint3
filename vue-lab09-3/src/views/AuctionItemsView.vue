@@ -4,25 +4,53 @@
     
     <!-- Search and Filter Controls -->
     <div class="controls">
-      <div class="search-box">
-        <input 
-          v-model="searchDescription" 
-          @input="searchItems"
-          placeholder="Search by description..."
-          class="search-input"
-        />
+      <div class="search-section">
+        <h3>Search Auction Items</h3>
+        <div class="search-inputs">
+          <div class="search-box">
+            <label>Search by description:</label>
+            <input 
+              v-model="searchDescription" 
+              @input="searchItems"
+              placeholder="Enter description..."
+              class="search-input"
+            />
+          </div>
+          
+          <div class="search-box">
+            <label>Search by type:</label>
+            <select 
+              v-model="searchType" 
+              @change="searchItems"
+              class="search-input"
+            >
+              <option value="">All Types</option>
+              <option value="Collectibles">Collectibles</option>
+              <option value="Electronics">Electronics</option>
+              <option value="Art">Art</option>
+              <option value="Books">Books</option>
+              <option value="Jewelry">Jewelry</option>
+            </select>
+          </div>
+        </div>
       </div>
       
-      <div class="filter-box">
-        <label>Filter by max bid amount:</label>
-        <input 
-          v-model.number="maxBidAmount" 
-          @input="filterByBidAmount"
-          type="number"
-          placeholder="Enter max amount"
-          class="filter-input"
-        />
-        <button @click="clearFilters" class="clear-btn">Clear Filters</button>
+      <div class="filter-section">
+        <h3>Filter by Bid Amount</h3>
+        <div class="filter-box">
+          <label>Max bid amount:</label>
+          <input 
+            v-model.number="maxBidAmount" 
+            @input="filterByBidAmount"
+            type="number"
+            placeholder="Enter max amount"
+            class="filter-input"
+          />
+        </div>
+      </div>
+      
+      <div class="action-buttons">
+        <button @click="clearFilters" class="clear-btn">Clear All Filters</button>
       </div>
     </div>
 
@@ -109,6 +137,7 @@ const currentPage = ref(0)
 const pageSize = ref(10)
 const totalCount = ref(0)
 const searchDescription = ref('')
+const searchType = ref('')
 const maxBidAmount = ref<number | null>(null)
 
 // Computed properties
@@ -131,7 +160,8 @@ const loadAuctionItems = async () => {
       result = await auctionService.getAuctionItems(
         currentPage.value, 
         pageSize.value, 
-        searchDescription.value || undefined
+        searchDescription.value || undefined,
+        searchType.value || undefined
       )
     }
     
@@ -154,11 +184,13 @@ const searchItems = () => {
 const filterByBidAmount = () => {
   currentPage.value = 0
   searchDescription.value = ''
+  searchType.value = ''
   loadAuctionItems()
 }
 
 const clearFilters = () => {
   searchDescription.value = ''
+  searchType.value = ''
   maxBidAmount.value = null
   currentPage.value = 0
   loadAuctionItems()
@@ -196,16 +228,52 @@ onMounted(() => {
 }
 
 .controls {
-  display: flex;
-  gap: 20px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 30px;
   margin-bottom: 30px;
-  flex-wrap: wrap;
+  padding: 20px;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  border: 1px solid #dee2e6;
+}
+
+.search-section, .filter-section {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.search-section h3, .filter-section h3 {
+  margin: 0;
+  color: #495057;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.search-inputs {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
 }
 
 .search-box, .filter-box {
   display: flex;
-  align-items: center;
-  gap: 10px;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.search-box label, .filter-box label {
+  font-size: 14px;
+  font-weight: 500;
+  color: #6c757d;
+}
+
+.action-buttons {
+  grid-column: 1 / -1;
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
 }
 
 .search-input, .filter-input {

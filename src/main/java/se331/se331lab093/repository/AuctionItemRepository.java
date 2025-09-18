@@ -11,5 +11,7 @@ import java.util.List;
 public interface AuctionItemRepository extends JpaRepository<AuctionItem, Long> {
     List<AuctionItem> findAll();
     Page<AuctionItem> findByDescriptionContaining(String description, Pageable pageable);
+    Page<AuctionItem> findByTypeContaining(String type, Pageable pageable);
+    Page<AuctionItem> findByDescriptionContainingAndTypeContaining(String description, String type, Pageable pageable);
     Page<AuctionItem> findBySuccessfulBid_AmountLessThan(Double amount, Pageable pageable);
 }

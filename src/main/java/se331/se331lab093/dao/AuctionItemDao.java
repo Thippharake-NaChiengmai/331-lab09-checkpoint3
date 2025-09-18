@@ -11,5 +11,7 @@ public interface AuctionItemDao {
 
     Page<AuctionItem> getAuctionItems(String description, Pageable pageRequest);
 
+    Page<AuctionItem> getAuctionItems(String description, String type, Pageable pageRequest);
+
     Page<AuctionItem> getAuctionItemsBySuccessfulBidLessThan(Double amount, Pageable pageRequest);
 }

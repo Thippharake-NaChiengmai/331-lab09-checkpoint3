@@ -23,6 +23,11 @@ public class AuctionItemServicesImp implements AuctionItemServices {
     }
 
     @Override
+    public Page<AuctionItem> getAuctionItems(String description, String type, Pageable pageable) {
+        return auctionItemDao.getAuctionItems(description, type, pageable);
+    }
+
+    @Override
     public Page<AuctionItem> getAuctionItemsBySuccessfulBidLessThan(Double amount, Pageable pageable) {
         return auctionItemDao.getAuctionItemsBySuccessfulBidLessThan(amount, pageable);
     }

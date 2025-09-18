@@ -52,13 +52,30 @@ Frontend will run on: http://localhost:5173
 
 ## 🛠️ Features Implemented
 
+### ✅ Task 3.4: Frontend to show list of AuctionItems
+- Responsive auction items grid display
+- Shows all auction item details (ID, description, type, bids)
+- Pagination support for large datasets
+- Real-time bid display with amounts and timestamps
+- Winning bid highlighting with special styling
+
+### ✅ Task 3.5: Frontend to search AuctionItems by description and type
+- **Search by Description**: Text input for searching item descriptions
+- **Search by Type**: Dropdown selector for filtering by item types
+  - Collectibles
+  - Electronics  
+  - Art
+  - Books
+  - Jewelry
+- **Combined Search**: Search by both description AND type simultaneously
+- **Case-insensitive search** for better user experience
+
+### 🔧 Additional Features
 - ✅ CORS configuration for cross-origin requests
 - ✅ Axios HTTP client for API calls
-- ✅ Responsive auction items display
-- ✅ Search and filter functionality
-- ✅ Pagination support
-- ✅ Real-time bid display
-- ✅ Winning bid highlighting
+- ✅ Advanced filtering by bid amount
+- ✅ Clear all filters functionality
+- ✅ Loading states and error handling
 
 ## 🔧 Configuration
 

@@ -1,0 +1,29 @@
+### Test Task 3.4: Show list of AuctionItems
+GET http://localhost:8080/items
+
+### Test Task 3.5: Search by description only
+GET http://localhost:8080/items?description=Rolex
+
+### Test Task 3.5: Search by type only
+GET http://localhost:8080/items?type=Electronics
+
+### Test Task 3.5: Search by both description and type
+GET http://localhost:8080/items?description=Gaming&type=Electronics
+
+### Test Task 3.5: Search by type - Collectibles
+GET http://localhost:8080/items?type=Collectibles
+
+### Test Task 3.5: Search by type - Art
+GET http://localhost:8080/items?type=Art
+
+### Test Task 3.5: Search by type - Books
+GET http://localhost:8080/items?type=Books
+
+### Test Task 3.5: Search by type - Jewelry
+GET http://localhost:8080/items?type=Jewelry
+
+### Test pagination with search
+GET http://localhost:8080/items?description=Ring&_page=0&_limit=2
+
+### Test case insensitive search
+GET http://localhost:8080/items?type=electronics

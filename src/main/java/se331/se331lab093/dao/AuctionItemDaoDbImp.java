@@ -30,6 +30,19 @@ public class AuctionItemDaoDbImp implements AuctionItemDao {
     }
 
     @Override
+    public Page<AuctionItem> getAuctionItems(String description, String type, Pageable pageRequest) {
+        if (description != null && type != null) {
+            return auctionItemRepository.findByDescriptionContainingAndTypeContaining(description, type, pageRequest);
+        } else if (description != null) {
+            return auctionItemRepository.findByDescriptionContaining(description, pageRequest);
+        } else if (type != null) {
+            return auctionItemRepository.findByTypeContaining(type, pageRequest);
+        } else {
+            return auctionItemRepository.findAll(pageRequest);
+        }
+    }
+
+    @Override
     public Page<AuctionItem> getAuctionItemsBySuccessfulBidLessThan(Double amount, Pageable pageRequest) {
         return auctionItemRepository.findBySuccessfulBid_AmountLessThan(amount, pageRequest);
     }

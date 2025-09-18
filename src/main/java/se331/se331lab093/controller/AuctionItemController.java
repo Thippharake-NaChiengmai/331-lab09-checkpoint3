@@ -12,7 +12,7 @@ import se331.se331lab093.services.AuctionItemServices;
 
 @RestController
 @RequiredArgsConstructor
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins = {"http://localhost:5173", "http://localhost:3000", "http://127.0.0.1:5173"})
 public class AuctionItemController {
     final AuctionItemServices auctionItemServices;
 
@@ -20,14 +20,15 @@ public class AuctionItemController {
     public ResponseEntity<?> getAuctionItems(
             @RequestParam(value = "_limit", required = false) Integer perPage,
             @RequestParam(value = "_page", required = false) Integer page,
-            @RequestParam(value = "description", required = false) String description) {
+            @RequestParam(value = "description", required = false) String description,
+            @RequestParam(value = "type", required = false) String type) {
         
         perPage = perPage == null ? 10 : perPage;
         page = page == null ? 0 : page;
         Page<AuctionItem> pageOutput;
 
-        if (description != null) {
-            pageOutput = auctionItemServices.getAuctionItems(description, PageRequest.of(page, perPage));
+        if (description != null || type != null) {
+            pageOutput = auctionItemServices.getAuctionItems(description, type, PageRequest.of(page, perPage));
         } else {
             pageOutput = auctionItemServices.getAuctionItems(PageRequest.of(page, perPage));
         }

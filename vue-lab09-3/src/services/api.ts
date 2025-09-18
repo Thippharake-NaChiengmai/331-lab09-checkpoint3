@@ -33,10 +33,13 @@ export interface PaginatedResponse<T> {
 
 export const auctionService = {
   // Get all auction items with pagination
-  async getAuctionItems(page = 0, limit = 10, description?: string) {
+  async getAuctionItems(page = 0, limit = 10, description?: string, type?: string) {
     const params: any = { _page: page, _limit: limit }
     if (description) {
       params.description = description
+    }
+    if (type) {
+      params.type = type
     }
     
     const response = await api.get<AuctionItem[]>('/items', { params })
