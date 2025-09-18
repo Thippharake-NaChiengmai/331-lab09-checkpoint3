@@ -1,5 +1,6 @@
 package se331.se331lab093.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.*;
 import java.time.LocalDateTime;
@@ -17,6 +18,7 @@ public class Bid {
     LocalDateTime datetime;
 
     @ManyToOne
+    @JsonBackReference
     AuctionItem item;
 }
 

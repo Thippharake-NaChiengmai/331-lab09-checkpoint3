@@ -1,0 +1,11 @@
+### Test the /items endpoint
+GET http://localhost:8080/items
+
+### Test with pagination
+GET http://localhost:8080/items?_page=0&_limit=5
+
+### Test with description filter
+GET http://localhost:8080/items?description=Rolex
+
+### Test the /items/byBidAmount endpoint
+GET http://localhost:8080/items/byBidAmount?lessThan=500

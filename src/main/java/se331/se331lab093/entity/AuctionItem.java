@@ -1,5 +1,6 @@
 package se331.se331lab093.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 import java.util.ArrayList;
@@ -17,11 +18,13 @@ public class AuctionItem {
     String description;
     String type;
 
-    @OneToMany(mappedBy = "item", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "item", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @Builder.Default
+    @JsonManagedReference
     List<Bid> bids = new ArrayList<>();
 
     @OneToOne
+    @JsonManagedReference
     Bid successfulBid;
 }
 
