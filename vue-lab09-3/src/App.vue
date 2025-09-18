@@ -3,78 +3,98 @@ import { RouterLink, RouterView } from 'vue-router'
 </script>
 
 <template>
-  <header>
-    <div class="wrapper">
-      <h1>Auction House</h1>
-      <nav>
-        <RouterLink to="/">Home</RouterLink>
-        <RouterLink to="/auctions">Auctions</RouterLink>
-      </nav>
-    </div>
-  </header>
+  <div id="app">
+    <!-- Bootstrap Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm">
+      <div class="container">
+        <RouterLink class="navbar-brand fw-bold" to="/">
+          <i class="bi bi-hammer me-2"></i>
+          Auction House
+        </RouterLink>
+        
+        <button 
+          class="navbar-toggler" 
+          type="button" 
+          data-bs-toggle="collapse" 
+          data-bs-target="#navbarNav"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item">
+              <RouterLink class="nav-link" to="/">
+                <i class="bi bi-house me-1"></i>
+                Home
+              </RouterLink>
+            </li>
+            <li class="nav-item">
+              <RouterLink class="nav-link" to="/auctions">
+                <i class="bi bi-collection me-1"></i>
+                Auctions
+              </RouterLink>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
 
-  <RouterView />
+    <!-- Main Content -->
+    <main class="flex-grow-1">
+      <RouterView />
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-light py-4 mt-5">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-6">
+            <h5><i class="bi bi-hammer me-2"></i>Auction House</h5>
+            <p class="mb-0">Your premier destination for online auctions</p>
+          </div>
+          <div class="col-md-6 text-md-end">
+            <p class="mb-0">
+              <i class="bi bi-clock me-1"></i>
+              © 2024 Auction House. All rights reserved.
+            </p>
+            <p class="mb-0">Thippharake Na Chiengmai Code:662115019</p>
+          </div>
+        </div>
+      </div>
+    </footer>
+  </div>
 </template>
 
 <style scoped>
-header {
-  background-color: #2c3e50;
-  color: white;
-  padding: 1rem 0;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-}
-
-.wrapper {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 20px;
+#app {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  flex-direction: column;
+  min-height: 100vh;
 }
 
-.wrapper h1 {
-  margin: 0;
-  font-size: 1.8rem;
-  color: #ecf0f1;
+.navbar-brand {
+  font-size: 1.5rem;
 }
 
-nav {
-  display: flex;
-  gap: 2rem;
-}
-
-nav a {
-  color: #bdc3c7;
-  text-decoration: none;
+.nav-link {
   font-weight: 500;
-  padding: 0.5rem 1rem;
-  border-radius: 4px;
-  transition: all 0.3s ease;
+  transition: color 0.3s ease;
 }
 
-nav a:hover {
-  color: #ecf0f1;
-  background-color: rgba(255, 255, 255, 0.1);
+.nav-link:hover {
+  color: var(--bs-primary) !important;
 }
 
-nav a.router-link-exact-active {
-  color: #3498db;
-  background-color: rgba(52, 152, 219, 0.1);
+.router-link-active {
+  color: var(--bs-primary) !important;
 }
 
-@media (max-width: 768px) {
-  .wrapper {
-    flex-direction: column;
-    gap: 1rem;
-  }
-  
-  .wrapper h1 {
-    font-size: 1.5rem;
-  }
-  
-  nav {
-    gap: 1rem;
-  }
+main {
+  flex: 1;
+}
+
+footer {
+  margin-top: auto;
 }
 </style>

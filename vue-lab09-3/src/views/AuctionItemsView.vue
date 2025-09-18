@@ -1,126 +1,262 @@
 <template>
-  <div class="auction-items">
-    <h1>Auction Items</h1>
-    
-    <!-- Search and Filter Controls -->
-    <div class="controls">
-      <div class="search-section">
-        <h3>Search Auction Items</h3>
-        <div class="search-inputs">
-          <div class="search-box">
-            <label>Search by description:</label>
-            <input 
-              v-model="searchDescription" 
-              @input="searchItems"
-              placeholder="Enter description..."
-              class="search-input"
-            />
-          </div>
-          
-          <div class="search-box">
-            <label>Search by type:</label>
-            <select 
-              v-model="searchType" 
-              @change="searchItems"
-              class="search-input"
-            >
-              <option value="">All Types</option>
-              <option value="Collectibles">Collectibles</option>
-              <option value="Electronics">Electronics</option>
-              <option value="Art">Art</option>
-              <option value="Books">Books</option>
-              <option value="Jewelry">Jewelry</option>
-            </select>
+  <div class="container-fluid py-4">
+    <!-- Hero Section -->
+    <div class="search-section mb-4">
+      <div class="container">
+        <div class="row align-items-center">
+          <div class="col-lg-6">
+            <h1 class="display-4 fw-bold mb-3">
+              <i class="bi bi-collection me-3"></i>
+              Auction Items
+            </h1>
+            <p class="lead mb-0">Discover amazing items up for auction</p>
           </div>
         </div>
       </div>
-      
-      <div class="filter-section">
-        <h3>Filter by Bid Amount</h3>
-        <div class="filter-box">
-          <label>Max bid amount:</label>
-          <input 
-            v-model.number="maxBidAmount" 
-            @input="filterByBidAmount"
-            type="number"
-            placeholder="Enter max amount"
-            class="filter-input"
-          />
-        </div>
-      </div>
-      
-      <div class="action-buttons">
-        <button @click="clearFilters" class="clear-btn">Clear All Filters</button>
-      </div>
     </div>
 
-    <!-- Loading State -->
-    <div v-if="loading" class="loading">
-      Loading auction items...
-    </div>
-
-    <!-- Error State -->
-    <div v-if="error" class="error">
-      Error: {{ error }}
-    </div>
-
-    <!-- Auction Items Grid -->
-    <div v-if="!loading && !error" class="items-grid">
-      <div v-for="item in auctionItems" :key="item.id" class="item-card">
-        <div class="item-header">
-          <h3>{{ item.description }}</h3>
-          <span class="item-type">{{ item.type }}</span>
-        </div>
-        
-        <div class="item-details">
-          <p><strong>Item ID:</strong> {{ item.id }}</p>
-          
-          <!-- Bids Section -->
-          <div class="bids-section">
-            <h4>Bids ({{ item.bids?.length || 0 }})</h4>
-            <div v-if="item.bids && item.bids.length > 0" class="bids-list">
-              <div v-for="bid in item.bids" :key="bid.id" class="bid-item">
-                <span class="bid-amount">${{ bid.amount }}</span>
-                <span class="bid-date">{{ formatDate(bid.datetime) }}</span>
+    <div class="container">
+      <!-- Search and Filter Controls -->
+      <div class="row mb-4">
+        <div class="col-12">
+          <div class="card shadow-sm">
+            <div class="card-header bg-primary text-white">
+              <h5 class="mb-0">
+                <i class="bi bi-funnel me-2"></i>
+                Search & Filter
+              </h5>
+            </div>
+            <div class="card-body">
+              <div class="row g-3">
+                <!-- Search by Description -->
+                <div class="col-md-4">
+                  <label class="form-label fw-semibold">
+                    <i class="bi bi-search me-1"></i>
+                    Search by description
+                  </label>
+                  <input 
+                    v-model="searchDescription" 
+                    @input="searchItems"
+                    placeholder="Enter description..."
+                    class="form-control"
+                  />
+                </div>
+                
+                <!-- Search by Type -->
+                <div class="col-md-4">
+                  <label class="form-label fw-semibold">
+                    <i class="bi bi-tags me-1"></i>
+                    Search by type
+                  </label>
+                  <select 
+                    v-model="searchType" 
+                    @change="searchItems"
+                    class="form-select"
+                  >
+                    <option value="">All Types</option>
+                    <option value="Collectibles">🏺 Collectibles</option>
+                    <option value="Electronics">📱 Electronics</option>
+                    <option value="Art">🎨 Art</option>
+                    <option value="Books">📚 Books</option>
+                    <option value="Jewelry">💎 Jewelry</option>
+                  </select>
+                </div>
+                
+                <!-- Filter by Bid Amount -->
+                <div class="col-md-4">
+                  <label class="form-label fw-semibold">
+                    <i class="bi bi-currency-dollar me-1"></i>
+                    Max bid amount
+                  </label>
+                  <div class="input-group">
+                    <span class="input-group-text">$</span>
+                    <input 
+                      v-model.number="maxBidAmount" 
+                      @input="filterByBidAmount"
+                      type="number"
+                      placeholder="Enter max amount"
+                      class="form-control"
+                    />
+                  </div>
+                </div>
+              </div>
+              
+              <div class="row mt-3">
+                <div class="col-12 text-center">
+                  <button @click="clearFilters" class="btn btn-outline-secondary">
+                    <i class="bi bi-arrow-clockwise me-1"></i>
+                    Clear All Filters
+                  </button>
+                </div>
               </div>
             </div>
-            <p v-else class="no-bids">No bids yet</p>
           </div>
+        </div>
+      </div>
 
-          <!-- Successful Bid -->
-          <div v-if="item.successfulBid" class="successful-bid">
-            <h4>Winning Bid</h4>
-            <div class="winning-bid">
-              <span class="winning-amount">${{ item.successfulBid.amount }}</span>
-              <span class="winning-date">{{ formatDate(item.successfulBid.datetime) }}</span>
+      <!-- Loading State -->
+      <div v-if="loading" class="text-center py-5">
+        <div class="spinner-border text-primary" role="status">
+          <span class="visually-hidden">Loading...</span>
+        </div>
+        <p class="mt-3 text-muted">Loading auction items...</p>
+      </div>
+
+      <!-- Error State -->
+      <div v-if="error" class="alert alert-danger d-flex align-items-center" role="alert">
+        <i class="bi bi-exclamation-triangle-fill me-2"></i>
+        <div>
+          <strong>Error:</strong> {{ error }}
+        </div>
+      </div>
+
+      <!-- Auction Items Grid -->
+      <div v-if="!loading && !error" class="row g-4">
+        <div v-for="item in auctionItems" :key="item.id" class="col-lg-4 col-md-6">
+          <div class="card auction-card h-100 shadow-sm">
+            <div class="card-header d-flex justify-content-between align-items-center">
+              <h5 class="card-title mb-0 text-truncate" :title="item.description">
+                {{ item.description }}
+              </h5>
+              <span class="badge bg-primary rounded-pill">
+                {{ getTypeIcon(item.type) }} {{ item.type }}
+              </span>
+            </div>
+            
+            <div class="card-body">
+              <div class="mb-3">
+                <small class="text-muted">
+                  <i class="bi bi-hash me-1"></i>
+                  Item ID: {{ item.id }}
+                </small>
+              </div>
+              
+              <!-- Bids Section -->
+              <div class="mb-3">
+                <h6 class="d-flex align-items-center mb-2">
+                  <i class="bi bi-currency-dollar me-2"></i>
+                  Bids ({{ item.bids?.length || 0 }})
+                </h6>
+                
+                <div v-if="item.bids && item.bids.length > 0" class="bids-container">
+                  <div class="row g-2">
+                    <!-- Always show first 3 bids -->
+                    <div v-for="bid in item.bids.slice(0, 3)" :key="bid.id" class="col-12">
+                      <div class="d-flex justify-content-between align-items-center p-2 bg-light rounded">
+                        <span class="bid-amount fw-bold text-success">
+                          ${{ bid.amount.toLocaleString() }}
+                        </span>
+                        <small class="text-muted">
+                          <i class="bi bi-clock me-1"></i>
+                          {{ formatDate(bid.datetime) }}
+                        </small>
+                      </div>
+                    </div>
+                    
+                    <!-- Show additional bids when expanded -->
+                    <template v-if="expandedBids.has(item.id)">
+                      <div v-for="bid in item.bids.slice(3)" :key="bid.id" class="col-12">
+                        <div class="d-flex justify-content-between align-items-center p-2 bg-light rounded">
+                          <span class="bid-amount fw-bold text-success">
+                            ${{ bid.amount.toLocaleString() }}
+                          </span>
+                          <small class="text-muted">
+                            <i class="bi bi-clock me-1"></i>
+                            {{ formatDate(bid.datetime) }}
+                          </small>
+                        </div>
+                      </div>
+                    </template>
+                  </div>
+                  
+                  <!-- Show More/Less button always at the bottom -->
+                  <div v-if="item.bids.length > 3" class="text-center mt-2">
+                    <button class="btn btn-sm btn-outline-primary" @click="toggleBids(item.id)">
+                      <i class="bi bi-three-dots"></i>
+                      {{ expandedBids.has(item.id) ? 'Show Less' : `+${item.bids.length - 3} more` }}
+                    </button>
+                  </div>
+                </div>
+                
+                <div v-else class="text-center py-3">
+                  <i class="bi bi-inbox text-muted fs-1"></i>
+                  <p class="text-muted mb-0">No bids yet</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Successful Bid -->
+            <div v-if="item.successfulBid" class="card-footer">
+              <div class="winning-bid text-center">
+                <div class="d-flex align-items-center justify-content-center mb-2">
+                  <i class="bi bi-trophy-fill me-2"></i>
+                  <strong>Winning Bid</strong>
+                </div>
+                <div class="fs-4 fw-bold">
+                  ${{ item.successfulBid.amount.toLocaleString() }}
+                </div>
+                <small class="opacity-75">
+                  <i class="bi bi-calendar-check me-1"></i>
+                  {{ formatDate(item.successfulBid.datetime) }}
+                </small>
+              </div>
+            </div>
+            
+            <div v-else class="card-footer">
+              <div class="auction-active text-center">
+                <div class="d-flex align-items-center justify-content-center mb-2">
+                  <i class="bi bi-hourglass-split me-2"></i>
+                  <strong>Auction Active</strong>
+                </div>
+                <div class="fs-5 fw-bold text-warning">
+                  Bidding Open
+                </div>
+                <small class="text-muted">
+                  <i class="bi bi-clock me-1"></i>
+                  Place your bid now!
+                </small>
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
 
-    <!-- Pagination -->
-    <div v-if="totalCount > pageSize" class="pagination">
-      <button 
-        @click="previousPage" 
-        :disabled="currentPage === 0"
-        class="page-btn"
-      >
-        Previous
-      </button>
-      
-      <span class="page-info">
-        Page {{ currentPage + 1 }} of {{ totalPages }}
-        ({{ totalCount }} total items)
-      </span>
-      
-      <button 
-        @click="nextPage" 
-        :disabled="currentPage >= totalPages - 1"
-        class="page-btn"
-      >
-        Next
-      </button>
+      <!-- Pagination -->
+      <div v-if="totalCount > pageSize" class="d-flex justify-content-center mt-5">
+        <nav aria-label="Auction items pagination">
+          <ul class="pagination pagination-lg">
+            <li class="page-item" :class="{ disabled: currentPage === 0 }">
+              <button 
+                @click="previousPage" 
+                :disabled="currentPage === 0"
+                class="page-link"
+              >
+                <i class="bi bi-chevron-left"></i>
+                Previous
+              </button>
+            </li>
+            
+            <li class="page-item active">
+              <span class="page-link">
+                Page {{ currentPage + 1 }} of {{ totalPages }}
+                <br>
+                <small>({{ totalCount }} total items)</small>
+              </span>
+            </li>
+            
+            <li class="page-item" :class="{ disabled: currentPage >= totalPages - 1 }">
+              <button 
+                @click="nextPage" 
+                :disabled="currentPage >= totalPages - 1"
+                class="page-link"
+              >
+                Next
+                <i class="bi bi-chevron-right"></i>
+              </button>
+            </li>
+          </ul>
+        </nav>
+      </div>
     </div>
   </div>
 </template>
@@ -139,6 +275,7 @@ const totalCount = ref(0)
 const searchDescription = ref('')
 const searchType = ref('')
 const maxBidAmount = ref<number | null>(null)
+const expandedBids = ref(new Set<number>())
 
 // Computed properties
 const totalPages = computed(() => Math.ceil(totalCount.value / pageSize.value))
@@ -214,6 +351,25 @@ const formatDate = (dateString: string) => {
   return new Date(dateString).toLocaleString()
 }
 
+const getTypeIcon = (type: string) => {
+  const icons: Record<string, string> = {
+    'Collectibles': '🏺',
+    'Electronics': '📱',
+    'Art': '🎨',
+    'Books': '📚',
+    'Jewelry': '💎'
+  }
+  return icons[type] || '📦'
+}
+
+const toggleBids = (itemId: number) => {
+  if (expandedBids.value.has(itemId)) {
+    expandedBids.value.delete(itemId)
+  } else {
+    expandedBids.value.add(itemId)
+  }
+}
+
 // Load data on component mount
 onMounted(() => {
   loadAuctionItems()
@@ -221,220 +377,63 @@ onMounted(() => {
 </script>
 
 <style scoped>
-.auction-items {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 20px;
-}
-
-.controls {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 30px;
-  margin-bottom: 30px;
-  padding: 20px;
-  background-color: #f8f9fa;
-  border-radius: 8px;
-  border: 1px solid #dee2e6;
-}
-
-.search-section, .filter-section {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-}
-
-.search-section h3, .filter-section h3 {
-  margin: 0;
-  color: #495057;
-  font-size: 16px;
-  font-weight: 600;
-}
-
-.search-inputs {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-}
-
-.search-box, .filter-box {
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-}
-
-.search-box label, .filter-box label {
-  font-size: 14px;
-  font-weight: 500;
-  color: #6c757d;
-}
-
-.action-buttons {
-  grid-column: 1 / -1;
-  display: flex;
-  justify-content: center;
-  margin-top: 10px;
-}
-
-.search-input, .filter-input {
-  padding: 8px 12px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  font-size: 14px;
-}
-
-.clear-btn {
-  padding: 8px 16px;
-  background-color: #6c757d;
+/* Custom styles for Bootstrap components */
+.search-section {
+  background: linear-gradient(135deg, #3498db, #2980b9);
   color: white;
+  border-radius: 12px;
+  padding: 2rem;
+}
+
+.auction-card {
+  transition: all 0.3s ease;
   border: none;
-  border-radius: 4px;
-  cursor: pointer;
 }
 
-.clear-btn:hover {
-  background-color: #5a6268;
+.auction-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
 }
 
-.loading, .error {
-  text-align: center;
-  padding: 40px;
-  font-size: 18px;
-}
-
-.error {
-  color: #dc3545;
-}
-
-.items-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
-  gap: 20px;
-  margin-bottom: 30px;
-}
-
-.item-card {
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  padding: 20px;
-  background-color: #f8f9fa;
-}
-
-.item-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 15px;
-}
-
-.item-header h3 {
-  margin: 0;
-  color: #333;
-}
-
-.item-type {
-  background-color: #007bff;
-  color: white;
-  padding: 4px 8px;
-  border-radius: 4px;
-  font-size: 12px;
-}
-
-.bids-section {
-  margin: 15px 0;
-}
-
-.bids-section h4 {
-  margin: 0 0 10px 0;
-  color: #666;
-}
-
-.bids-list {
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-}
-
-.bid-item {
-  display: flex;
-  justify-content: space-between;
-  padding: 5px 10px;
-  background-color: white;
-  border-radius: 4px;
-  font-size: 14px;
-}
-
-.bid-amount {
-  font-weight: bold;
-  color: #28a745;
-}
-
-.bid-date {
-  color: #666;
-  font-size: 12px;
-}
-
-.no-bids {
-  color: #999;
-  font-style: italic;
-}
-
-.successful-bid {
-  margin-top: 15px;
-  padding: 10px;
-  background-color: #d4edda;
-  border-radius: 4px;
-}
-
-.successful-bid h4 {
-  margin: 0 0 5px 0;
-  color: #155724;
+.bids-container {
+  max-height: 200px;
+  overflow-y: auto;
 }
 
 .winning-bid {
-  display: flex;
-  justify-content: space-between;
+  background: linear-gradient(135deg, #27ae60, #2ecc71);
+  border-radius: 8px;
 }
 
-.winning-amount {
-  font-weight: bold;
-  font-size: 18px;
-  color: #155724;
-}
-
-.winning-date {
-  color: #666;
-  font-size: 12px;
-}
-
-.pagination {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 20px;
-  margin-top: 30px;
-}
-
-.page-btn {
-  padding: 8px 16px;
-  background-color: #007bff;
+.auction-active {
+  background: linear-gradient(135deg, #f39c12, #e67e22);
   color: white;
+  border-radius: 8px;
+  padding: 1rem;
+}
+
+.page-link {
   border: none;
-  border-radius: 4px;
-  cursor: pointer;
+  color: var(--bs-primary);
+  font-weight: 500;
 }
 
-.page-btn:hover:not(:disabled) {
-  background-color: #0056b3;
+.page-link:hover {
+  background-color: var(--bs-primary);
+  color: white;
 }
 
-.page-btn:disabled {
-  background-color: #6c757d;
-  cursor: not-allowed;
+.badge {
+  font-size: 0.75em;
 }
 
-.page-info {
-  font-size: 14px;
-  color: #666;
+@media (max-width: 768px) {
+  .search-section .row {
+    text-align: center;
+  }
+  
+  .search-section .col-lg-6:last-child {
+    margin-top: 1rem;
+  }
 }
 </style>
