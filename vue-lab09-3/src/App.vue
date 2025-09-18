@@ -56,7 +56,7 @@ import { RouterLink, RouterView } from 'vue-router'
           <div class="col-md-6 text-md-end">
             <p class="mb-0">
               <i class="bi bi-clock me-1"></i>
-              © 2024 Auction House. All rights reserved.
+              © 2025 Auction House. All rights reserved.
             </p>
             <p class="mb-0">Thippharake Na Chiengmai Code:662115019</p>
           </div>
