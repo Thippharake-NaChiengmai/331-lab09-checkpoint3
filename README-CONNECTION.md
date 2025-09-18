@@ -1,53 +1,61 @@
-# Frontend-Backend Connection Guide
+# 🏛️ Auction House Application
+
+A full-stack auction application built with Spring Boot backend and Vue.js frontend.
 
 ## 🚀 Quick Start
 
-### Option 1: Using Batch Files (Windows)
-1. **Start Backend**: Double-click `start-backend.bat`
-2. **Start Frontend**: Double-click `start-frontend.bat`
-
-### Option 2: Manual Start
-
-#### Backend (Spring Boot)
+### Start Backend (Spring Boot)
 ```bash
 cd d:\Code\component-based\331-lab09-3
 mvnw.cmd spring-boot:run
 ```
-Backend will run on: http://localhost:8080
+Backend runs on: **http://localhost:8080**
 
-#### Frontend (Vue.js)
+### Start Frontend (Vue.js)
 ```bash
 cd d:\Code\component-based\331-lab09-3\vue-lab09-3
 npm run dev
 ```
-Frontend will run on: http://localhost:5173
+Frontend runs on: **http://localhost:5173**
 
 ## 🔗 API Endpoints
 
 - `GET /items` - Get all auction items
-- `GET /items?description=search` - Search auction items
+- `GET /items?description=search` - Search by description
+- `GET /items?type=Electronics` - Search by type
+- `GET /items?description=laptop&type=Electronics` - Combined search
 - `GET /items/byBidAmount?lessThan=500` - Filter by bid amount
 
-## 🎯 Testing the Connection
-
-1. Start both backend and frontend
-2. Open browser to http://localhost:5173
-3. Click on "Auctions" in the navigation
-4. You should see auction items loaded from the backend
-
-## 📁 Project Structure
+## 📁 Clean Project Structure
 
 ```
-331-lab09-3/
-├── src/main/java/...           # Spring Boot Backend
-├── vue-lab09-3/                # Vue.js Frontend
+auction-house/
+├── src/main/java/se331/se331lab093/
+│   ├── controller/
+│   │   ├── AuctionItemController.java    # REST API endpoints
+│   │   └── BidController.java
+│   ├── entity/
+│   │   ├── AuctionItem.java              # Main entity
+│   │   └── Bid.java                      # Bid entity
+│   ├── dao/
+│   │   ├── AuctionItemDao.java           # Data access interface
+│   │   └── AuctionItemDaoImp.java        # In-memory implementation
+│   ├── services/
+│   │   ├── AuctionItemServices.java      # Business logic interface
+│   │   └── AuctionItemServicesImp.java   # Business logic implementation
+│   └── config/
+│       └── CorsConfig.java               # CORS configuration
+├── vue-lab09-3/                          # Vue.js Frontend
 │   ├── src/
-│   │   ├── services/api.ts     # API service layer
-│   │   ├── views/AuctionItemsView.vue
-│   │   └── router/index.ts
+│   │   ├── services/api.ts               # API client
+│   │   ├── views/
+│   │   │   ├── HomeView.vue              # Landing page
+│   │   │   └── AuctionItemsView.vue      # Main auction interface
+│   │   ├── router/index.ts               # Vue router
+│   │   └── App.vue                       # Main app component
 │   └── package.json
-├── start-backend.bat           # Backend start script
-└── start-frontend.bat          # Frontend start script
+├── start-backend.bat                     # Backend launcher
+└── start-frontend.bat                    # Frontend launcher
 ```
 
 ## 🛠️ Features Implemented
